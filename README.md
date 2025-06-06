@@ -22,6 +22,10 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
    ```bash
    pip install -r requirements.txt
    ```
+3. Verify the installation by running the smoke test:
+   ```bash
+   python test_smoke.py
+   ```
 
 ## Temporary Patch for `Anthropic.__init__`
 This repository includes a `sitecustomize.py` file that monkey‑patches
