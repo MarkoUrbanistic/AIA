@@ -21,11 +21,24 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
+3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
+   ```bash
+   cp .env.example .env
    ```
-3. Verify the installation by running the smoke test:
+4. Verify the installation by running the smoke test:
    ```bash
    python test_smoke.py
    ```
+
+## Configuration
+The agent reads a few environment variables when starting up:
+
+- `OFFLINE` – controls whether only local models are used. It defaults to
+  `true`, so the agent runs completely offline unless you explicitly set it to a
+  falsey value.
+- `ANTHROPIC_API_KEY` – when this variable is set, Open Interpreter can access
+  Anthropics models online. Provide a valid key and set `OFFLINE=false` if you
+  want to use cloud models.
 
 ## Temporary Patch for `Anthropic.__init__`
 This repository includes a `sitecustomize.py` file that monkey‑patches
@@ -41,6 +54,18 @@ After activating the virtual environment and installing requirements, start the 
 ```bash
 python main.py
 ```
+You can override the model or offline mode from the command line. For example:
+```bash
+python main.py --model ollama/phi3:mini
+```
+Pass `--offline` to force local-only mode regardless of the `OFFLINE` environment variable.
+On Windows, you can use the provided batch script which activates the
+virtual environment and launches the agent:
+```bat
+run_agent.bat
+```
+Before running, set `ANTHROPIC_API_KEY` if you want online model access
+and `OFFLINE=true` to force local mode.
 The agent can run offline using local models through Ollama or connect to online services if the required API keys are provided.
 
 ## License

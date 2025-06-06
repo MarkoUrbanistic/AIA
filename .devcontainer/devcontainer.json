@@ -1,0 +1,7 @@
+{
+    "name": "AIA Devcontainer",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [7860]
+}
