@@ -41,6 +41,13 @@ After activating the virtual environment and installing requirements, start the 
 ```bash
 python main.py
 ```
+On Windows, you can use the provided batch script which activates the
+virtual environment and launches the agent:
+```bat
+run_agent.bat
+```
+Before running, set `ANTHROPIC_API_KEY` if you want online model access
+and `OFFLINE=true` to force local mode.
 The agent can run offline using local models through Ollama or connect to online services if the required API keys are provided.
 
 ## License
