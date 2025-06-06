@@ -1,6 +1,19 @@
 import os
+import sys
+import types
 from interpreter import interpreter
 from interpreter.terminal_interface.start_terminal_interface import start_terminal_interface
+
+# Inject a lightweight ComputerTool implementation based on pywinauto if
+# the default one cannot be imported (e.g. missing pyautogui on Windows).
+try:
+    import interpreter.computer_use.tools.computer  # noqa: F401
+except Exception:  # pragma: no cover - only executed when pyautogui is missing
+    from windows_computer_tool import ComputerTool as WinComputerTool
+
+    module = types.ModuleType("interpreter.computer_use.tools.computer")
+    module.ComputerTool = WinComputerTool
+    sys.modules["interpreter.computer_use.tools.computer"] = module
 
 
 def configure_interpreter() -> None:
