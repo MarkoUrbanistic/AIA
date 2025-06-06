@@ -1,8 +1,12 @@
 import os
+hg676y-codex/implement-script-for-venv-setup
+import argparse
+=======
 vq0ck5-codex/evaluate-pywinauto-or-uiautomation-for-automation
 import sys
 import types
 import argparse
+main
 main
 from interpreter import interpreter
 from interpreter.terminal_interface.start_terminal_interface import start_terminal_interface
@@ -14,11 +18,14 @@ try:
 except Exception:  # pragma: no cover - only executed when pyautogui is missing
     from windows_computer_tool import ComputerTool as WinComputerTool
 
+hg676y-codex/implement-script-for-venv-setup
+=======
     module = types.ModuleType("interpreter.computer_use.tools.computer")
     module.ComputerTool = WinComputerTool
     sys.modules["interpreter.computer_use.tools.computer"] = module
 
 
+main
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Run Open Interpreter")

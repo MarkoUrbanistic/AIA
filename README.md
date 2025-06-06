@@ -13,18 +13,26 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 - [Ollama](https://ollama.ai/) installed with at least one model
 
 ## Setup
-1. Create a virtual environment:
+1. Run the included setup script which creates `.venv`, installs requirements, copies `sitecustomize.py` and pulls the model specified by `OLLAMA_MODEL` if set:
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
+   python setup_env.py
    ```
-2. Install dependencies:
+2. Activate the virtual environment:
    ```bash
+hg676y-codex/implement-script-for-venv-setup
+   source .venv/bin/activate  # on Windows use .venv\Scripts\activate
+   ```
+3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
+   ```bash
+   cp .env.example .env
+   ```
+=======
    pip install -r requirements.txt
 3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
    ```bash
    cp .env.example .env
    ```
+main
 4. Verify the installation by running the smoke test:
    ```bash
    python test_smoke.py
@@ -34,23 +42,27 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 The agent reads a few environment variables when starting up:
 
 - `OFFLINE` – controls whether only local models are used. It defaults to
+ hg676y-codex/implement-script-for-venv-setup
+  `true`, so the agent runs completely offline unless you explicitly set it to a falsey value.
+=======
   `true`, so the agent runs completely offline unless you explicitly set it to a
   falsey value.
+ main
 - `ANTHROPIC_API_KEY` – when this variable is set, Open Interpreter can access
   Anthropics models online. Provide a valid key and set `OFFLINE=false` if you
   want to use cloud models.
 
 ## Temporary Patch for `Anthropic.__init__`
 This repository includes a `sitecustomize.py` file that monkey‑patches
-`Anthropic.__init__` to ignore the deprecated `proxies` parameter. Python will
-automatically import this module on startup as long as the file is located in the
+`Anthropic.__init__` to ignore the deprecated `proxies` parameter. Python will automatically import this module on startup as long as the file is located in the
 project root or inside the active virtual environment. Until the upstream
 `Anthropic` class is updated, keep this file in place so initialization succeeds
 without extra configuration. When online, ensure your `ANTHROPIC_API_KEY`
 environment variable is set before starting the agent.
 
 ## Running the Agent
-After activating the virtual environment and installing requirements, start the agent with:
+After activating the virtual environment and installing requirements, start the
+agent with:
 ```bash
 python main.py
 ```
