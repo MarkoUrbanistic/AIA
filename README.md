@@ -24,7 +24,13 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
    ```
 
 ## Temporary Patch for `Anthropic.__init__`
-Until the upstream `Anthropic` class is updated, apply the patch provided in this repository to allow initialization without API keys when running offline. When online, ensure your `ANTHROPIC_API_KEY` environment variable is set before starting the agent.
+This repository includes a `sitecustomize.py` file that monkey‑patches
+`Anthropic.__init__` to ignore the deprecated `proxies` parameter. Python will
+automatically import this module on startup as long as the file is located in the
+project root or inside the active virtual environment. Until the upstream
+`Anthropic` class is updated, keep this file in place so initialization succeeds
+without extra configuration. When online, ensure your `ANTHROPIC_API_KEY`
+environment variable is set before starting the agent.
 
 ## Running the Agent
 After activating the virtual environment and installing requirements, start the agent with:
