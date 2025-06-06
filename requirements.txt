@@ -1,5 +1,6 @@
 open-interpreter==0.4.3
 anthropic==0.37.1
+pywinauto==0.6.8
 
 # If a newer open-interpreter release fixes the proxies issue,
 # update the version here accordingly.
