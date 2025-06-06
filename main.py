@@ -1,9 +1,38 @@
 import os
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
 import argparse
+=======
+hg676y-codex/implement-script-for-venv-setup
+import argparse
+=======
+vq0ck5-codex/evaluate-pywinauto-or-uiautomation-for-automation
+import sys
+import types
+import argparse
+main
+main
+ main
 from interpreter import interpreter
 from interpreter.terminal_interface.start_terminal_interface import start_terminal_interface
 
+# Inject a lightweight ComputerTool implementation based on pywinauto if
+# the default one cannot be imported (e.g. missing pyautogui on Windows).
+try:
+    import interpreter.computer_use.tools.computer  # noqa: F401
+except Exception:  # pragma: no cover - only executed when pyautogui is missing
+    from windows_computer_tool import ComputerTool as WinComputerTool
 
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+=======
+hg676y-codex/implement-script-for-venv-setup
+=======
+    module = types.ModuleType("interpreter.computer_use.tools.computer")
+    module.ComputerTool = WinComputerTool
+    sys.modules["interpreter.computer_use.tools.computer"] = module
+
+
+main
+ main
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Run Open Interpreter")
