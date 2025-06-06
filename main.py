@@ -9,9 +9,11 @@ def configure_interpreter() -> None:
     offline_env = os.getenv("OFFLINE", "true")
     interpreter.offline = offline_env.lower() in {"1", "true", "yes"}
 
-    # If running offline and no model selected, default to an Ollama model
-    if interpreter.offline and not interpreter.llm.model:
-        interpreter.llm.model = "ollama/llama3"
+    # If running offline, force a local model if none is configured or if the
+    # current model points to a cloud service.
+    if interpreter.offline:
+        if not interpreter.llm.model or "/" not in interpreter.llm.model:
+            interpreter.llm.model = "ollama/llama3"
 
     # Propagate Anthropic API key if provided
     api_key = os.getenv("ANTHROPIC_API_KEY")

@@ -43,5 +43,24 @@ python main.py
 ```
 The agent can run offline using local models through Ollama or connect to online services if the required API keys are provided.
 
+### Offline example
+Run completely offline with a locally served model by setting `OFFLINE=true`:
+```bash
+OFFLINE=true python main.py
+```
+The agent defaults to offline mode, so this step is optional but ensures it won't
+attempt any network calls. By default it uses the `ollama/llama3` model unless
+you specify another. Set `OFFLINE=false` along with your API key to enable
+cloud access.
+
+### Online example
+Provide your key to access Anthropic models via the cloud:
+```bash
+ANTHROPIC_API_KEY=<your-key> python main.py
+```
+
+### Windows quick start
+Windows users can simply run the `run_agent.bat` script once the virtual environment is ready.
+
 ## License
 This project is licensed under the [MIT License](LICENSE).
