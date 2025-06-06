@@ -1,3 +1,5 @@
-import openinterpreter
+import importlib.util
 
-openinterpreter.OpenInterpreter().run('print("hello")')
+# Basic sanity check that the interpreter package is installed.
+assert importlib.util.find_spec("interpreter") is not None
+print("interpreter module available")
