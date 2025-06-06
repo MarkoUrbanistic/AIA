@@ -54,6 +54,11 @@ After activating the virtual environment and installing requirements, start the 
 ```bash
 python main.py
 ```
+You can override the model or offline mode from the command line. For example:
+```bash
+python main.py --model ollama/phi3:mini
+```
+Pass `--offline` to force local-only mode regardless of the `OFFLINE` environment variable.
 On Windows, you can use the provided batch script which activates the
 virtual environment and launches the agent:
 ```bat
