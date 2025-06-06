@@ -1,0 +1,97 @@
+Izveštaj o dosadašnjem radu na projektu „AI-Agent / Open Interpreter“
+1. Pregled cilja
+Cilj - podići lokalni „agent“ (Open Interpreter + Ollama model) koji može:
+
+izvršavati prirodno-jezičke komande (npr. „Open Calculator and add 2 + 2“),
+
+koristiti OS-mode (kontrolisati Windows GUI),
+
+raditi offline za LLM (phi3:mini) i on-line preko Anthropic/Claude kada je API ključ dostupan,
+
+biti lako deljen (GitHub repo + Codespaces).
+
+2. Hronologija rada i problemi
+#	Radnja / problem	Uzrok	Rešenje / status
+2.1	Inicijalna instalacija pip install open-interpreter + pokretanje interpreter --ollama phi3:mini --os	–	Instalacija uspešna; problem se javlja pri startu.
+2.2	Greška: ValueError: Invalid format string (string formater %-d)	datetime.today().strftime('%A, %B %-d, %Y') nije podržan na Windows-u	Ručno izmenjen loop.py → zamenjeno %-d sa %d (ili dvostruka logika per-OS).
+2.3	Greška: Client.__init__() got an unexpected keyword argument 'proxies'	Nova verzija anthropic SDK uklonila je parametar proxies; Open-Interpreter < 0.4.3 ga i dalje prosleđuje	Kreiran sitecustomize.py u venv-u koji u runtime-u “monkey-patch-uje” anthropic.Anthropic.__init__ (pop ključa proxies iz kwargs). ✅ Patched poruka „patch Anthropic init is LOADED!“ potvrđuje rad.
+2.4	Greška pri pip upgrade: No matching distribution found for open-interpreter>=0.4.4	v0.4.4 tek objavljen; PyPI cache / mirrors nisu (bili) osveženi	Ostali smo na 0.4.3 + custom patch (radi).
+2.5	API prompt pri startu (“Enter your Anthropic API key: …”) uz EOFError	Kad se interpreter pokreće unutar .bat bez STDIN-a, input() baca EOF	Zakomentarisano traženje ključa (api_key = "") u loop.py – OS-mode radi offline (samo lokalni LLM).
+2.6	Batch automatizacija (run_agent.bat + tasks.txt) – interpreter se pokrene, ali svaki task i dalje baca proxies grešku	Isti uzrok (2.3); patch je kasnije rešio	Nakon patch-a više se ne vidi proxies ali OS-mode zahteva GUI interakcije koje nisu dozvoljene bez API ključa (ili user input-a).
+2.7	Maksimalna recursion depth exceeded (jednom registrovana)	Spurious loop tokom patch-ovanja/editovanja	Jednokratna; restart venv-a rešio.
+2.8	Pokušaj globalnog reinstall-a (upgrade anthropic 0.52 → 0.37)	Open-Interpreter ≤0.4.3 zahteva anthropic<0.38. Ručno smo vratili 0.37.1	Verzije sada kompatibilne.
+2.9	Alat interpreter.exe u venv-u ne nalazi se kad se poziva iz C:\Windows\system32	PATH ne pokazuje na venv; user nije aktivirao venv	Kada je venv aktiviran (.\venv\Scripts\Activate.ps1) → where.exe python i where.exe interpreter pokazuju prave putanje.
+
+3. Trenutno stanje (✅ / ⚠️ / ❌)
+Komponenta	Stanje
+Lokalni venv (python.exe, interpreter.exe)	✅ Rade; patch se automatski učitava preko sitecustomize.py
+OS-mode sa phi3:mini (offline)	⚠️ Pokrene se bez fatalnih grešaka, ali GUI actions ne izvršavaju (potreban dalji debug BashTool/ComputerTool na Win)
+Anthropic/Claude integracija	❌ Onemogućena (API key se preskače)
+Tasks-runner (run_agent.bat + tasks.txt)	⚠️ Radi, ali svaki zadatak i dalje zavisi od uspeha OS-mode komandi
+Repo/versioning	❌ Sve lokalno – nije gurnuto na GitHub
+
+4. Preporučeni sledeći koraci
+4.1 Stabilizacija i testiranje lokalnog “core”
+Bump Open-Interpreter > 0.4.3 čim PyPI mirror bude ažuran, ukloniti privremeni patch ako upstream popravi proxies.
+
+Napraviti minimalni smoke-test (Python script) koji:
+
+pokreće interpreter -c "print('hello')"
+
+pokreće interpreter --ollama phi3:mini -c "2+2"
+
+proverava da nema traceback-a.
+
+4.2 Publikovanje na GitHub (koraci iz prethodne poruke)
+git init → .gitignore → requirements.txt
+
+gh repo create AI-Agent … --push
+
+Dodati u README: patch notice i instrukcije za Windows.
+
+4.3 Automatizovan setup script (low-touch)
+setup_ai_agent.py (ili install.ps1) koji:
+
+Instl. Python 3.11,
+
+kreira venv,
+
+pip install -r requirements.txt,
+
+kopira sitecustomize.py,
+
+(opciono) preuzima latest model preko ollama pull.
+
+4.4 CI & Codespaces
+GitHub Actions workflow ci.yml:
+
+python -m pip install -r requirements.txt
+
+pokrenuti smoke-test.
+
+Codespaces devcontainer: Dockerfile + devcontainer.json (forward-uje port 7860 ako zatreba UI).
+
+4.5 GUI-automation na Windows
+Verifikovati da pyautogui radi pod Win 11 (potreban pydirectinput za UAC-elevated prozore).
+
+Ako ComputerTool i dalje ne šalje klikove/keystroke-ove – zameniti ga sa uiautomation ili pywinauto.
+
+4.6 API integracije
+Dodati .env.example i uputstvo za ANTHROPIC_API_KEY.
+
+U loop.py uslovno tražiti ključ samo kad user eksplicitno zatraži cloud model – izbeći input() u batch-u.
+
+5. Šta je (najverovatnije) još ostalo da ne radi
+Modul	Mogući uzrok	Predlog testa / popravke
+ComputerTool (klik/tipkanje)	Windows 11 zahteva pywin32 permission ili drugačiju metodu injektovanja input-a	Napraviti malu skriptu: import pyautogui; pyautogui.write("test") van Interpretera
+BashTool na Win	Podrazumeva WSL/bash; na čistom cmd/PS komande se ne mapiraju	Preusmeriti na powershell.exe -Command
+EOFError kad nema STDIN	Batch-skripte pokreću interpreter bez konzole	Proslediti --input "" ili setovati RUN_INTERPRETER_NONINTERACTIVE=true.
+
+6. Zaključak
+Ključni “show-stopper” bio je uklanjanje parametra proxies iz novog anthropic SDK-a → ručno patchovanje rešilo problem za verziju 0.4.3.
+
+Trenutno možemo pokrenuti interpreter + lokalni LLM, ali GUI-komande još nisu pouzdane.
+
+Sledeći koraci su repo-zvanična struktura (GitHub), dodatni smoke-testovi i zamena ili popravka ComputerTool-a na Windows-u.
+
+Kada to proradi, projekat može da se lansira kao „Jedan-klik setup“ uz setup_ai_agent.py i GitHub Codespaces podršku, a debugging i dalji razvoj raditi direktno u VS Code uz pomoć OpenAI Codex ekstenzije.
