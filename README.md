@@ -22,6 +22,10 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
    ```bash
    pip install -r requirements.txt
    ```
+3. Verify the installation by running the smoke test:
+   ```bash
+   python test_smoke.py
+   ```
 
 ## Temporary Patch for `Anthropic.__init__`
 Until the upstream `Anthropic` class is updated, apply the patch provided in this repository to allow initialization without API keys when running offline. When online, ensure your `ANTHROPIC_API_KEY` environment variable is set before starting the agent.
