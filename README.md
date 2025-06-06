@@ -13,19 +13,26 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 - [Ollama](https://ollama.ai/) installed with at least one model
 
 ## Setup
-1. Create a virtual environment:
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Verify the installation by running the smoke test:
-   ```bash
-   python test_smoke.py
-   ```
+The repository ships with a helper script that prepares the development
+environment. Running it will create `.venv`, install dependencies and copy the
+`sitecustomize.py` patch. If the `OLLAMA_MODEL` environment variable is set, the
+script will also pull that model using `ollama`.
+
+```bash
+python setup_env.py
+```
+
+After the script completes, activate the virtual environment:
+
+```bash
+source .venv/bin/activate  # on Windows use .venv\Scripts\activate
+```
+
+Finally, verify the installation by running the smoke test:
+
+```bash
+python test_smoke.py
+```
 
 ## Temporary Patch for `Anthropic.__init__`
 This repository includes a `sitecustomize.py` file that monkey‑patches
