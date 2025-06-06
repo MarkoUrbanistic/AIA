@@ -27,6 +27,16 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
    python test_smoke.py
    ```
 
+## Configuration
+The agent reads a few environment variables when starting up:
+
+- `OFFLINE` – controls whether only local models are used. It defaults to
+  `true`, so the agent runs completely offline unless you explicitly set it to a
+  falsey value.
+- `ANTHROPIC_API_KEY` – when this variable is set, Open Interpreter can access
+  Anthropics models online. Provide a valid key and set `OFFLINE=false` if you
+  want to use cloud models.
+
 ## Temporary Patch for `Anthropic.__init__`
 This repository includes a `sitecustomize.py` file that monkey‑patches
 `Anthropic.__init__` to ignore the deprecated `proxies` parameter. Python will
