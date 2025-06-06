@@ -19,12 +19,20 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
    ```
 2. Activate the virtual environment:
    ```bash
+hg676y-codex/implement-script-for-venv-setup
    source .venv/bin/activate  # on Windows use .venv\Scripts\activate
    ```
 3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
    ```bash
    cp .env.example .env
    ```
+=======
+   pip install -r requirements.txt
+3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
+   ```bash
+   cp .env.example .env
+   ```
+main
 4. Verify the installation by running the smoke test:
    ```bash
    python test_smoke.py
@@ -34,7 +42,12 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 The agent reads a few environment variables when starting up:
 
 - `OFFLINE` – controls whether only local models are used. It defaults to
+ hg676y-codex/implement-script-for-venv-setup
   `true`, so the agent runs completely offline unless you explicitly set it to a falsey value.
+=======
+  `true`, so the agent runs completely offline unless you explicitly set it to a
+  falsey value.
+ main
 - `ANTHROPIC_API_KEY` – when this variable is set, Open Interpreter can access
   Anthropics models online. Provide a valid key and set `OFFLINE=false` if you
   want to use cloud models.
