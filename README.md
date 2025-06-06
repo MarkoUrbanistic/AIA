@@ -21,8 +21,11 @@ This project aims to provide a local AI agent based on [Open Interpreter](https:
 2. Install dependencies:
    ```bash
    pip install -r requirements.txt
+3. Copy `.env.example` to `.env` and add your `ANTHROPIC_API_KEY` if needed:
+   ```bash
+   cp .env.example .env
    ```
-3. Verify the installation by running the smoke test:
+4. Verify the installation by running the smoke test:
    ```bash
    python test_smoke.py
    ```
