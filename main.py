@@ -1,4 +1,7 @@
 import os
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+import argparse
+=======
 hg676y-codex/implement-script-for-venv-setup
 import argparse
 =======
@@ -8,6 +11,7 @@ import types
 import argparse
 main
 main
+ main
 from interpreter import interpreter
 from interpreter.terminal_interface.start_terminal_interface import start_terminal_interface
 
@@ -18,6 +22,8 @@ try:
 except Exception:  # pragma: no cover - only executed when pyautogui is missing
     from windows_computer_tool import ComputerTool as WinComputerTool
 
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+=======
 hg676y-codex/implement-script-for-venv-setup
 =======
     module = types.ModuleType("interpreter.computer_use.tools.computer")
@@ -26,6 +32,7 @@ hg676y-codex/implement-script-for-venv-setup
 
 
 main
+ main
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description="Run Open Interpreter")
@@ -52,9 +59,11 @@ def configure_interpreter(args: argparse.Namespace) -> None:
     if model:
         interpreter.llm.model = model
 
-    # If running offline and no model selected, default to an Ollama model
-    if interpreter.offline and not interpreter.llm.model:
-        interpreter.llm.model = "ollama/llama3"
+    # If running offline, force a local model if none is configured or if the
+    # current model points to a cloud service.
+    if interpreter.offline:
+        if not interpreter.llm.model or "/" not in interpreter.llm.model:
+            interpreter.llm.model = "ollama/llama3"
 
     # Propagate Anthropic API key if provided
     api_key = os.getenv("ANTHROPIC_API_KEY")

@@ -32,7 +32,10 @@ hg676y-codex/implement-script-for-venv-setup
    ```bash
    cp .env.example .env
    ```
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+=======
 main
+ main
 4. Verify the installation by running the smoke test:
    ```bash
    python test_smoke.py
@@ -42,11 +45,16 @@ main
 The agent reads a few environment variables when starting up:
 
 - `OFFLINE` – controls whether only local models are used. It defaults to
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+  `true`, so the agent runs completely offline unless you explicitly set it to a
+  falsey value.
+=======
  hg676y-codex/implement-script-for-venv-setup
   `true`, so the agent runs completely offline unless you explicitly set it to a falsey value.
 =======
   `true`, so the agent runs completely offline unless you explicitly set it to a
   falsey value.
+ main
  main
 - `ANTHROPIC_API_KEY` – when this variable is set, Open Interpreter can access
   Anthropics models online. Provide a valid key and set `OFFLINE=false` if you
@@ -79,6 +87,25 @@ run_agent.bat
 Before running, set `ANTHROPIC_API_KEY` if you want online model access
 and `OFFLINE=true` to force local mode.
 The agent can run offline using local models through Ollama or connect to online services if the required API keys are provided.
+
+### Offline example
+Run completely offline with a locally served model by setting `OFFLINE=true`:
+```bash
+OFFLINE=true python main.py
+```
+The agent defaults to offline mode, so this step is optional but ensures it won't
+attempt any network calls. By default it uses the `ollama/llama3` model unless
+you specify another. Set `OFFLINE=false` along with your API key to enable
+cloud access.
+
+### Online example
+Provide your key to access Anthropic models via the cloud:
+```bash
+ANTHROPIC_API_KEY=<your-key> python main.py
+```
+
+### Windows quick start
+Windows users can simply run the `run_agent.bat` script once the virtual environment is ready.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

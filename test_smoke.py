@@ -1,3 +1,17 @@
+ tmnpki-codex/show-agent-start-with-offline=true-and-local-model
+"""Basic smoke test to verify that Open Interpreter imports correctly."""
+
+import os
+from argparse import Namespace
+
+os.environ.setdefault("OFFLINE", "true")
+
+from interpreter import interpreter
+from main import configure_interpreter
+
+configure_interpreter(Namespace(offline=None, model=None))
+interpreter.chat('print("hello")')
+=======
 hg676y-codex/implement-script-for-venv-setup
 """Simple smoke test to verify Open Interpreter installation."""
 
@@ -34,3 +48,4 @@ except Exception:
 raise SystemExit(exit_code)
 main
 main
+ main
