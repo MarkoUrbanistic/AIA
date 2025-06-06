@@ -32,3 +32,6 @@ After activating the virtual environment and installing requirements, start the 
 python main.py
 ```
 The agent can run offline using local models through Ollama or connect to online services if the required API keys are provided.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
